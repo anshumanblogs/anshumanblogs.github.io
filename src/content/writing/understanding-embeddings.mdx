@@ -18,13 +18,13 @@ Search engines, recommendation systems, and language models all rely on the same
 
 An embedding is a vector — a fixed-length list of numbers — assigned to a piece of data such that similar things end up with similar vectors. "Similar" here is measured geometrically, usually with cosine similarity or Euclidean distance.
 
-'''python
+```python
 from numpy import dot
 from numpy.linalg import norm
 
 def cosine_similarity(a, b):
     return dot(a, b) / (norm(a) * norm(b))
-'''
+```
 
 ## Why Nearby Vectors Mean Similar Meaning
 

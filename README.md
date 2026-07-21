@@ -16,19 +16,19 @@ Live site: https://anshumanhq.github.io/
 
 If you want to run locally, you can clone and install:
 
-'''bash
+```bash
 npm install
 npm run dev
-'''
+```
 
 Visit `http://localhost:4321`.
 
 ## Build
 
-'''bash
+```bash
 npm run build
 npm run preview
-'''
+```
 
 `npm run build` outputs a fully static site to `dist/`.
 
@@ -57,7 +57,7 @@ No environment variables or backend services are required.
 1. Create a new `.mdx` file inside `src/content/writing/`. The filename becomes the URL slug.
 2. Add frontmatter at the top:
 
-'''yaml
+```yaml
 ---
 title: "Your Article Title"
 description: "A one-sentence summary shown in cards and previews."
@@ -69,7 +69,7 @@ featured: false
 draft: false
 tags: ["optional", "tags"]
 ---
-'''
+```
 
 3. Write the article body in Markdown/MDX below the frontmatter — headings (`##`, `###`), code blocks, lists, blockquotes, links, and tables are all supported and styled automatically.
 4. Set `draft: true` while working on it — draft articles are excluded from `/writing`, the homepage, RSS, and sitemap, but still build so you can preview locally via a direct URL if `draft` is temporarily set to `false` on your machine.
