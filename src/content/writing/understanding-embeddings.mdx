@@ -1,0 +1,51 @@
+---
+title: "Understanding Embeddings: How Machines Turn Meaning Into Numbers"
+description: "A practical look at what embeddings actually are, why they work, and how they show up in real AI systems."
+type: "Article"
+category: "AI & ML"
+pubDate: 2026-06-22
+readingTime: "10 min read"
+tags: ["ai", "machine learning", "embeddings", "nlp"]
+---
+
+This article is a general-purpose introduction to embeddings, written to demonstrate this journal's "Article" format for AI/ML topics.
+
+## The Hook
+
+Search engines, recommendation systems, and language models all rely on the same underlying trick: turning words, images, or entire documents into lists of numbers that somehow capture *meaning*. That trick is called an embedding.
+
+## What an Embedding Actually Is
+
+An embedding is a vector — a fixed-length list of numbers — assigned to a piece of data such that similar things end up with similar vectors. "Similar" here is measured geometrically, usually with cosine similarity or Euclidean distance.
+
+'''python
+from numpy import dot
+from numpy.linalg import norm
+
+def cosine_similarity(a, b):
+    return dot(a, b) / (norm(a) * norm(b))
+'''
+
+## Why Nearby Vectors Mean Similar Meaning
+
+Embedding models are trained so that context predicts meaning: words that appear in similar contexts get pushed toward similar vectors during training. This is why, in a well-trained embedding space, "king" and "queen" end up closer to each other than "king" and "bicycle."
+
+### A Simple Illustration
+
+- `dog` and `puppy` → close together
+- `dog` and `cat` → somewhat close (both animals)
+- `dog` and `spreadsheet` → far apart
+
+## Where Embeddings Show Up in Practice
+
+- **Search** — matching a query to documents by meaning, not just keyword overlap
+- **Recommendation systems** — placing users and items in the same space to find nearby matches
+- **Retrieval-augmented generation (RAG)** — fetching the most relevant chunks of text to feed into a language model
+
+## Limitations
+
+Embeddings capture statistical patterns in training data, not ground truth. Biases present in the data show up in the geometry of the resulting space, and similarity in vector space doesn't always align with human judgments of similarity.
+
+## Conclusion
+
+Embeddings are the quiet infrastructure behind most modern AI systems — not because they're exotic, but because turning meaning into geometry turns out to be an extremely useful thing to be able to do.

@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ArticleCard from './ArticleCard.astro';
+
+interface Props {
+  current: CollectionEntry<'writing'>;
+  all: CollectionEntry<'writing'>[];
+}
+
+const { current, all } = Astro.props;
+
+const related = all
+  .filter((e) => e.slug !== current.slug && e.data.category === current.data.category)
+  .slice(0, 3);
+---
+
+{related.length > 0 && (
+  <section class="mt-16 pt-8 border-t border-border" aria-label="Related articles">
+    <h2 class="text-sm uppercase tracking-widest text-muted mb-2">More in {current.data.category}</h2>
+    {related.map((entry) => <ArticleCard entry={entry} />)}
+  </section>
+)}

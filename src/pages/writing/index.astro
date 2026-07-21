@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import CategoryFilter from '../../components/CategoryFilter.astro';
+import { getCollection } from 'astro:content';
+
+const published = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<BaseLayout title="Writing" description="All articles, research notes, build logs, and learnings.">
+  <Header />
+
+  <main id="main-content" class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="text-3xl font-serif font-semibold">Writing</h1>
+    <p class="mt-3 text-muted max-w-xl">
+      Every article, research note, build log, and reflection I've published — newest first.
+      Looking for something specific? Try <a href="/search" class="text-accent hover:underline">search</a>.
+    </p>
+
+    <div class="mt-10">
+      <CategoryFilter />
+
+      {published.length === 0 ? (
+        <p class="text-muted">No articles published yet. Check back soon.</p>
+      ) : (
+        <div>
+          {published.map((entry) => <ArticleCard entry={entry} />)}
+          <p id="writing-empty-state" class="hidden text-muted py-10 text-center">
+            No articles match these filters yet.
+          </p>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

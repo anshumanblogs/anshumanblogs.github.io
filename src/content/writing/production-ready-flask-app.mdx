@@ -1,0 +1,90 @@
+---
+title: "How I Built a Production-Ready Flask Application"
+description: "A walkthrough of the architecture, decisions, and mistakes behind moving a Flask app from a single script to something that actually holds up in production."
+type: "Build Log"
+category: "Engineering"
+pubDate: 2026-07-18
+readingTime: "9 min read"
+featured: true
+tags: ["flask", "python", "backend", "deployment"]
+---
+
+This is a sample build log demonstrating the structure this journal uses for engineering write-ups. It walks through a generic Flask project setup — the specifics are illustrative, not a record of a real deployed system.
+
+## The Problem
+
+Most Flask tutorials stop at `app.run(debug=True)`. The gap between "it works on my machine" and "it survives real traffic" is where most of the actual engineering happens: configuration, error handling, logging, and structure that doesn't collapse the moment a second developer touches it.
+
+## Architecture
+
+A small production-leaning Flask app usually needs, at minimum:
+
+- An application factory instead of a global `app` object
+- Config separated by environment (development, testing, production)
+- Blueprints instead of one giant `routes.py`
+- A proper WSGI entrypoint for deployment
+
+'''python
+# app/__init__.py
+from flask import Flask
+
+def create_app(config_object="app.config.ProductionConfig"):
+    app = Flask(__name__)
+    app.config.from_object(config_object)
+
+    from app.routes import main_bp
+    app.register_blueprint(main_bp)
+
+    return app
+'''
+
+'''python
+# wsgi.py
+from app import create_app
+
+app = create_app()
+
+if __name__ == "__main__":
+    app.run()
+'''
+
+### Configuration
+
+Keeping secrets out of source control is non-negotiable:
+
+'''python
+# app/config.py
+import os
+
+class BaseConfig:
+    SECRET_KEY = os.environ.get("SECRET_KEY", "change-me")
+
+class ProductionConfig(BaseConfig):
+    DEBUG = False
+
+class DevelopmentConfig(BaseConfig):
+    DEBUG = True
+'''
+
+## Database
+
+For most small-to-medium apps, SQLAlchemy with a migrations tool (Alembic, via Flask-Migrate) removes an entire category of "which environment has which schema" bugs.
+
+> The single biggest reliability improvement wasn't a framework choice — it was simply never running raw SQL migrations by hand again.
+
+## What Failed
+
+- Running Flask's dev server in production initially — it silently handled far less concurrent load than expected, which only showed up under real traffic.
+- Storing uploaded files on local disk on a platform that periodically resets its filesystem, losing user data between deploys.
+
+## What I Learned
+
+Structure pays for itself the moment more than one route exists. Blueprints, an application factory, and environment-based config aren't premature abstraction — they're the minimum needed to add a second feature without dread.
+
+## What I Would Do Differently
+
+I'd add structured logging and a health-check endpoint from day one instead of retrofitting them after the first production incident.
+
+## Conclusion
+
+None of this is exotic. It's the unglamorous 20% of a Flask app that determines whether the other 80% stays maintainable.

@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  prev: CollectionEntry<'writing'> | null;
+  next: CollectionEntry<'writing'> | null;
+}
+
+const { prev, next } = Astro.props;
+---
+
+{(prev || next) && (
+  <nav class="mt-16 pt-8 border-t border-border grid sm:grid-cols-2 gap-4" aria-label="Article navigation">
+    <div>
+      {prev && (
+        <a href={`/writing/${prev.slug}`} class="block group">
+          <span class="text-xs text-muted">&larr; Previous</span>
+          <p class="mt-1 text-sm font-medium group-hover:text-accent transition-colors">{prev.data.title}</p>
+        </a>
+      )}
+    </div>
+    <div class="sm:text-right">
+      {next && (
+        <a href={`/writing/${next.slug}`} class="block group">
+          <span class="text-xs text-muted">Next &rarr;</span>
+          <p class="mt-1 text-sm font-medium group-hover:text-accent transition-colors">{next.data.title}</p>
+        </a>
+      )}
+    </div>
+  </nav>
+)}

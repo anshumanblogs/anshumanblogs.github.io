@@ -1,0 +1,68 @@
+---
+import MobileMenu from './MobileMenu.astro';
+
+const navItems = [
+  { label: 'Writing', href: '/writing' },
+  { label: 'Research', href: '/writing?category=Research' },
+  { label: 'Projects', href: '/writing?category=Projects' },
+  { label: 'About', href: '/about' },
+  { label: 'Search', href: '/search' }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur supports-[backdrop-filter]:bg-bg/70">
+  <div class="mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+    <a href="/" class="flex flex-col leading-tight" aria-label="AnshumanHQ home">
+      <span class="font-mono font-semibold tracking-tight text-text">ANSHUMANHQ</span>
+      <span class="text-xs text-muted">Ideas, experiments, and things I build.</span>
+    </a>
+
+    <nav class="hidden sm:flex items-center gap-6" aria-label="Primary">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="nav-link"
+          aria-current={currentPath === item.href ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <button
+      id="mobile-menu-button"
+      class="sm:hidden inline-flex items-center justify-center rounded-md border border-border p-2 text-muted hover:text-text"
+      aria-expanded="false"
+      aria-controls="mobile-menu-panel"
+      aria-label="Open menu"
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <MobileMenu navItems={navItems} />
+</header>
+
+<script>
+  const button = document.getElementById('mobile-menu-button');
+  const panel = document.getElementById('mobile-menu-panel');
+
+  if (button && panel) {
+    button.addEventListener('click', () => {
+      const isOpen = panel.classList.toggle('hidden') === false;
+      button.setAttribute('aria-expanded', String(isOpen));
+      button.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    });
+
+    panel.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        panel.classList.add('hidden');
+        button.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+</script>

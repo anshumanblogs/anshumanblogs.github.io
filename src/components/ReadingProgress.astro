@@ -1,0 +1,21 @@
+<div class="fixed top-0 left-0 right-0 h-0.5 z-[60] bg-transparent" aria-hidden="true">
+  <div id="reading-progress" class="h-full bg-accent"></div>
+</div>
+
+<script>
+  const bar = document.getElementById('reading-progress');
+  const article = document.querySelector('article');
+
+  function updateProgress() {
+    if (!bar || !article) return;
+    const rect = article.getBoundingClientRect();
+    const total = rect.height - window.innerHeight;
+    const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+    const ratio = total > 0 ? scrolled / total : 0;
+    bar.style.transform = `scaleX(${ratio})`;
+  }
+
+  document.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+</script>

@@ -1,0 +1,44 @@
+---
+export interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{items.length > 0 && (
+  <>
+    <nav class="hidden lg:block sticky top-24 self-start text-sm" aria-label="Table of contents">
+      <p class="category-label mb-3">Table of Contents</p>
+      <ul class="space-y-2 border-l border-border pl-4">
+        {items.map((h) => (
+          <li style={h.depth === 3 ? 'margin-left: 12px' : undefined}>
+            <a href={`#${h.slug}`} class="text-muted hover:text-accent transition-colors">
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <details class="lg:hidden border border-border rounded-md p-4 mb-8">
+      <summary class="cursor-pointer category-label">Table of Contents</summary>
+      <ul class="mt-3 space-y-2 text-sm">
+        {items.map((h) => (
+          <li style={h.depth === 3 ? 'margin-left: 12px' : undefined}>
+            <a href={`#${h.slug}`} class="text-muted hover:text-accent transition-colors">
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  </>
+)}

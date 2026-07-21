@@ -1,0 +1,103 @@
+---
+const categories = ['All', 'Engineering', 'AI & ML', 'Research', 'Projects', 'Learning'];
+const types = ['All types', 'Article', 'Research Note', 'Build Log', 'Learning', 'Explainer'];
+---
+
+<div class="flex flex-col gap-3 mb-10" id="filter-bar">
+  <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+    {categories.map((c) => (
+      <button
+        type="button"
+        class="chip"
+        data-filter-category={c}
+        aria-pressed={c === 'All' ? 'true' : 'false'}
+      >
+        {c}
+      </button>
+    ))}
+  </div>
+  <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by content type">
+    {types.map((t) => (
+      <button
+        type="button"
+        class="chip"
+        data-filter-type={t}
+        aria-pressed={t === 'All types' ? 'true' : 'false'}
+      >
+        {t}
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  const bar = document.getElementById('filter-bar');
+  const cards = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-category][data-type]'));
+  const emptyState = document.getElementById('writing-empty-state');
+
+  let activeCategory = 'All';
+  let activeType = 'All types';
+
+  function applyFilters() {
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const matchesCategory = activeCategory === 'All' || card.dataset.category === activeCategory;
+      const matchesType = activeType === 'All types' || card.dataset.type === activeType;
+      const visible = matchesCategory && matchesType;
+      card.style.display = visible ? '' : 'none';
+      if (visible) visibleCount++;
+    });
+
+    if (emptyState) {
+      emptyState.classList.toggle('hidden', visibleCount !== 0);
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    activeCategory === 'All' ? params.delete('category') : params.set('category', activeCategory);
+    activeType === 'All types' ? params.delete('type') : params.set('type', activeType);
+    const newUrl = `${window.location.pathname}${params.toString() ? `?${params}` : ''}`;
+    window.history.replaceState({}, '', newUrl);
+  }
+
+  bar?.querySelectorAll<HTMLButtonElement>('[data-filter-category]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.filterCategory ?? 'All';
+      bar.querySelectorAll('[data-filter-category]').forEach((b) =>
+        b.setAttribute('aria-pressed', String(b === btn))
+      );
+      applyFilters();
+    });
+  });
+
+  bar?.querySelectorAll<HTMLButtonElement>('[data-filter-type]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeType = btn.dataset.filterType ?? 'All types';
+      bar.querySelectorAll('[data-filter-type]').forEach((b) =>
+        b.setAttribute('aria-pressed', String(b === btn))
+      );
+      applyFilters();
+    });
+  });
+
+  // read initial state from URL so /writing?category=Research works
+  const initialParams = new URLSearchParams(window.location.search);
+  const initialCategory = initialParams.get('category');
+  const initialType = initialParams.get('type');
+
+  if (initialCategory) {
+    const btn = bar?.querySelector<HTMLButtonElement>(`[data-filter-category="${CSS.escape(initialCategory)}"]`);
+    if (btn) {
+      activeCategory = initialCategory;
+      bar?.querySelectorAll('[data-filter-category]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    }
+  }
+  if (initialType) {
+    const btn = bar?.querySelector<HTMLButtonElement>(`[data-filter-type="${CSS.escape(initialType)}"]`);
+    if (btn) {
+      activeType = initialType;
+      bar?.querySelectorAll('[data-filter-type]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    }
+  }
+
+  applyFilters();
+</script>

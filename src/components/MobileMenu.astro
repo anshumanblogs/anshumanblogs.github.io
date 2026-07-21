@@ -1,0 +1,28 @@
+---
+export interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  navItems: NavItem[];
+}
+
+const { navItems } = Astro.props;
+---
+
+<nav
+  id="mobile-menu-panel"
+  class="hidden sm:hidden border-t border-border bg-bg px-6 py-4"
+  aria-label="Mobile"
+>
+  <ul class="flex flex-col gap-4">
+    {navItems.map((item) => (
+      <li>
+        <a href={item.href} class="block text-sm text-muted hover:text-text transition-colors">
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const published = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+const searchIndex = published.map((entry) => ({
+  slug: entry.slug,
+  title: entry.data.title,
+  description: entry.data.description,
+  category: entry.data.category,
+  type: entry.data.type,
+  tags: entry.data.tags ?? [],
+  excerpt: entry.body.slice(0, 600)
+}));
+---
+
+<BaseLayout title="Search" description="Search articles, research notes, and build logs on AnshumanHQ Journal.">
+  <Header />
+
+  <main id="main-content" class="mx-auto max-w-2xl px-6 py-16">
+    <h1 class="text-3xl font-serif font-semibold">Search</h1>
+    <p class="mt-3 text-muted">Search across titles, descriptions, categories, types, and tags.</p>
+
+    <div class="mt-8">
+      <label for="search-input" class="sr-only">Search articles</label>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Search articles, e.g. 'Flask', 'entropy', 'embeddings'…"
+        class="w-full rounded-md border border-border bg-surface px-4 py-3 text-text placeholder:text-muted focus:border-accent/60"
+        autocomplete="off"
+      />
+    </div>
+
+    <p id="results-count" class="mt-6 text-sm text-muted"></p>
+    <div id="search-results" class="mt-2"></div>
+    <p id="search-empty-state" class="hidden text-muted py-10 text-center">
+      No results yet. Try a different keyword.
+    </p>
+  </main>
+
+  <Footer />
+
+  <script type="application/json" id="search-index" set:html={JSON.stringify(searchIndex)} />
+
+  <script>
+    interface SearchEntry {
+      slug: string;
+      title: string;
+      description: string;
+      category: string;
+      type: string;
+      tags: string[];
+      excerpt: string;
+    }
+
+    const indexEl = document.getElementById('search-index');
+    const index: SearchEntry[] = indexEl ? JSON.parse(indexEl.textContent || '[]') : [];
+
+    const input = document.getElementById('search-input') as HTMLInputElement | null;
+    const resultsEl = document.getElementById('search-results');
+    const countEl = document.getElementById('results-count');
+    const emptyEl = document.getElementById('search-empty-state');
+
+    function renderResults(items: SearchEntry[]) {
+      if (!resultsEl || !countEl || !emptyEl) return;
+
+      resultsEl.innerHTML = '';
+
+      if (countEl) {
+        countEl.textContent = items.length > 0 ? `${items.length} result${items.length === 1 ? '' : 's'}` : '';
+      }
+
+      emptyEl.classList.toggle('hidden', items.length !== 0);
+
+      items.forEach((item) => {
+        const link = document.createElement('a');
+        link.href = `/writing/${item.slug}`;
+        link.className = 'block py-6 border-b border-border group';
+        link.innerHTML = `
+          <span class="category-label">${item.category} · ${item.type}</span>
+          <h3 class="mt-2 text-lg font-medium group-hover:text-accent transition-colors">${item.title}</h3>
+          <p class="mt-1 text-sm text-muted">${item.description}</p>
+        `;
+        resultsEl.appendChild(link);
+      });
+    }
+
+    function search(query: string) {
+      const q = query.trim().toLowerCase();
+      if (!q) {
+        renderResults([]);
+        return;
+      }
+
+      const matches = index.filter((item) => {
+        const haystack = [
+          item.title,
+          item.description,
+          item.category,
+          item.type,
+          item.excerpt,
+          ...(item.tags ?? [])
+        ]
+          .join(' ')
+          .toLowerCase();
+        return haystack.includes(q);
+      });
+
+      renderResults(matches);
+    }
+
+    input?.addEventListener('input', () => search(input.value));
+
+    // keyboard: focus input with "/"
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== input) {
+        e.preventDefault();
+        input?.focus();
+      }
+    });
+  </script>
+</BaseLayout>

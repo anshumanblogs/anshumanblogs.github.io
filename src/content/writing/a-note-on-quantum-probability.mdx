@@ -1,0 +1,54 @@
+---
+title: "A Small Note on Quantum Probability"
+description: "A short research note working through a basic probability question in quantum mechanics, written as a learning exercise rather than original research."
+type: "Research Note"
+category: "Research"
+pubDate: 2026-05-28
+readingTime: "6 min read"
+tags: ["physics", "quantum mechanics", "probability"]
+---
+
+This is a demonstration research note. It works through a standard, well-known textbook result as a personal exercise — it is not a claim of new scientific findings.
+
+## Question
+
+Given a quantum state written as a superposition of basis states, how do we get an actual probability out of it?
+
+## Background
+
+In quantum mechanics, a system's state is described by a wavefunction, often expressed as a sum:
+
+$$\psi = c_1 \phi_1 + c_2 \phi_2$$
+
+where \\(\phi_1\\) and \\(\phi_2\\) are basis states and \\(c_1, c_2\\) are complex coefficients.
+
+## Method
+
+The Born rule states that the probability of measuring the system in state \\(\phi_i\\) is the squared magnitude of its coefficient:
+
+$$P(\phi_i) = |c_i|^2$$
+
+For this to be a valid probability distribution, the coefficients must satisfy normalization:
+
+$$|c_1|^2 + |c_2|^2 = 1$$
+
+## Working Through an Example
+
+Suppose \\(c_1 = \frac{1}{\sqrt{2}}\\) and \\(c_2 = \frac{1}{\sqrt{2}}\\). Then:
+
+- \\(P(\phi_1) = \left(\frac{1}{\sqrt{2}}\right)^2 = 0.5\\)
+- \\(P(\phi_2) = \left(\frac{1}{\sqrt{2}}\right)^2 = 0.5\\)
+
+Which checks out — a fair 50/50 split, and the probabilities sum to 1 as required.
+
+## Limitations
+
+This note only covers the discrete, two-state case, and takes the Born rule as given rather than deriving or justifying it — that derivation involves measurement theory that's out of scope for a short note like this.
+
+## What I Learned
+
+Working the arithmetic by hand, rather than just reading the Born rule as a formula, made the normalization requirement feel like an actual constraint rather than a footnote.
+
+## References
+
+Standard introductory quantum mechanics textbooks cover the Born rule and normalization condition used above.

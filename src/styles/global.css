@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-text;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-bg rounded-sm;
+  }
+
+  a {
+    @apply underline-offset-4;
+  }
+}
+
+@layer components {
+  .category-label {
+    @apply text-xs font-mono uppercase tracking-widest text-accent;
+  }
+
+  .nav-link {
+    @apply text-sm text-muted hover:text-text transition-colors;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-medium text-bg hover:bg-accent/90 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-border px-4 py-2 text-sm font-medium text-text hover:border-accent/60 transition-colors;
+  }
+
+  .chip {
+    @apply text-xs font-mono px-2.5 py-1 rounded-full border border-border text-muted hover:text-text hover:border-accent/50 transition-colors;
+  }
+
+  .chip[aria-pressed='true'] {
+    @apply text-bg bg-accent border-accent;
+  }
+}
+
+#reading-progress {
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 80ms linear;
+}

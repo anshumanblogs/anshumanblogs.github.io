@@ -1,0 +1,72 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import ArticleNavigation from '../components/ArticleNavigation.astro';
+import RelatedArticles from '../components/RelatedArticles.astro';
+import type { Heading } from '../components/TableOfContents.astro';
+
+interface Props {
+  entry: CollectionEntry<'writing'>;
+  headings: Heading[];
+  prev: CollectionEntry<'writing'> | null;
+  next: CollectionEntry<'writing'> | null;
+  all: CollectionEntry<'writing'>[];
+}
+
+const { entry, headings, prev, next, all } = Astro.props;
+const { title, description, type, category, pubDate, updatedDate, readingTime, canonicalUrl } = entry.data;
+
+function formatDate(d?: Date) {
+  if (!d || isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  canonicalUrl={canonicalUrl}
+>
+  <Header />
+  <ReadingProgress />
+
+  <main id="main-content" class="mx-auto max-w-5xl px-6 py-12 grid lg:grid-cols-[1fr_220px] gap-12">
+    <article>
+      <p class="text-sm">
+        <a href="/writing" class="nav-link">&larr; Back to Writing</a>
+      </p>
+
+      <span class="category-label block mt-6">{category} · {type}</span>
+      <h1 class="mt-3 text-3xl sm:text-4xl font-serif font-semibold leading-tight">{title}</h1>
+      <p class="mt-3 text-muted max-w-2xl">{description}</p>
+
+      <p class="mt-4 text-sm text-muted font-mono">
+        Anshuman Singh · {formatDate(pubDate)}
+        {updatedDate && ` · Updated ${formatDate(updatedDate)}`}
+        {' · '}{readingTime}
+      </p>
+
+      <div class="mt-6 lg:hidden">
+        <slot name="mobile-toc" />
+      </div>
+
+      <div class="mt-10 prose prose-invert max-w-none">
+        <slot />
+      </div>
+
+      <RelatedArticles current={entry} all={all} />
+      <ArticleNavigation prev={prev} next={next} />
+    </article>
+
+    <TableOfContents headings={headings} />
+  </main>
+
+  <Footer />
+</BaseLayout>

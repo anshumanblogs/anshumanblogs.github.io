@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FeaturedArticle from '../components/FeaturedArticle.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const published = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+const featured = published.find((e) => e.data.featured) ?? published[0] ?? null;
+const latest = published.filter((e) => e.slug !== featured?.slug).slice(0, 6);
+
+const categories = [
+  { name: 'Engineering', desc: 'Python · Flask · Backend · APIs · Databases · Web Development' },
+  { name: 'AI & ML', desc: 'Machine Learning · LLMs · Embeddings · AI Projects' },
+  { name: 'Research', desc: 'Physics · Mathematics · Computational Science · Research Notes' },
+  { name: 'Projects', desc: 'Build Logs · Experiments · Case Studies' },
+  { name: 'Learning', desc: 'Books · Courses · Concepts · Technical Reflections' }
+];
+---
+
+<BaseLayout title="AnshumanHQ Journal">
+  <Header />
+
+  <main id="main-content" class="mx-auto max-w-3xl px-6">
+    <section class="py-16 sm:py-24">
+      <h1 class="text-3xl sm:text-4xl font-serif font-semibold leading-tight">
+        Notes from building, learning, and investigating.
+      </h1>
+      <p class="mt-4 text-muted max-w-xl">
+        I write about software engineering, Python, AI, physics, mathematics, research, and the
+        things I discover while trying to understand how the world — and the systems we build —
+        work.
+      </p>
+      <div class="mt-6 flex gap-4">
+        <a href="/writing" class="btn-primary">Explore Articles</a>
+        <a href="/about" class="btn-secondary">About Me</a>
+      </div>
+    </section>
+
+    {featured && (
+      <section class="pb-12">
+        <FeaturedArticle entry={featured} />
+      </section>
+    )}
+
+    {latest.length > 0 && (
+      <section class="pb-16">
+        <h2 class="text-sm uppercase tracking-widest text-muted mb-2">Latest Writing</h2>
+        {latest.map((entry) => <ArticleCard entry={entry} />)}
+      </section>
+    )}
+
+    <section class="pb-16">
+      <h2 class="text-sm uppercase tracking-widest text-muted mb-4">Explore by Category</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        {categories.map((c) => (
+          <a
+            href={`/writing?category=${encodeURIComponent(c.name)}`}
+            class="block border border-border rounded-md p-5 hover:border-accent/50 transition-colors"
+          >
+            <p class="font-medium">{c.name}</p>
+            <p class="text-sm text-muted mt-1">{c.desc}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="pb-24 border-t border-border pt-10">
+      <h2 class="text-sm uppercase tracking-widest text-muted mb-3">A Little About Me</h2>
+      <p class="text-muted max-w-2xl">
+        I'm Anshuman — a self-taught developer working across Python, full-stack web development,
+        AI/ML, and independent research in physics and mathematics. This journal is where I keep an
+        honest record of what I build, what breaks, and what I actually learn along the way.
+      </p>
+      <a href="/about" class="inline-block mt-4 text-sm text-accent hover:underline">
+        Read the full About page &rarr;
+      </a>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
