@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://anshumanhq.github.io',
+  site: 'https://anshumanblogs.github.io',   // <<--- changed to your actual GitHub Pages URL
   base: '/',
   trailingSlash: 'never',
   output: 'static',
