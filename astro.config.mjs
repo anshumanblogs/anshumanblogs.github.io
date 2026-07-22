@@ -17,6 +17,9 @@ export default defineConfig({
     tailwind({ applyBaseStyles: false }),
   ],
   markdown: {
+    // 👇 These plugins are for .md files (they were missing!)
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
     shikiConfig: {
       theme: 'github-dark-dimmed',
       wrap: true,
