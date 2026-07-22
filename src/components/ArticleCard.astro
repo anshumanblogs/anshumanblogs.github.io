@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, description, type, category, pubDate, readingTime } = entry.data;
+const { title, description, type, category, pubDate, readingTime, coverImage, coverImageAlt } = entry.data;
 
 const dateStr = pubDate instanceof Date && !isNaN(pubDate.getTime())
   ? pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -15,12 +15,22 @@ const dateStr = pubDate instanceof Date && !isNaN(pubDate.getTime())
 
 <a
   href={`/writing/${entry.slug}`}
-  class="block py-6 border-b border-border group"
+  class="flex gap-4 py-6 border-b border-border group"
   data-category={category}
   data-type={type}
 >
-  <span class="category-label">{category} · {type}</span>
-  <h3 class="mt-2 text-lg font-medium group-hover:text-accent transition-colors">{title}</h3>
-  <p class="mt-1 text-sm text-muted line-clamp-2">{description}</p>
-  <p class="mt-2 text-xs text-muted font-mono">{readingTime}{dateStr ? ` · ${dateStr}` : ''}</p>
+  <img
+    src={coverImage}
+    alt={coverImageAlt ?? title}
+    width="120"
+    height="80"
+    loading="lazy"
+    class="w-28 h-20 sm:w-32 sm:h-24 rounded-md border border-border object-cover shrink-0 bg-surface"
+  />
+  <div class="min-w-0">
+    <span class="category-label">{category} · {type}</span>
+    <h3 class="mt-2 text-lg font-medium group-hover:text-accent transition-colors truncate">{title}</h3>
+    <p class="mt-1 text-sm text-muted line-clamp-2">{description}</p>
+    <p class="mt-2 text-xs text-muted font-mono">{readingTime}{dateStr ? ` · ${dateStr}` : ''}</p>
+  </div>
 </a>

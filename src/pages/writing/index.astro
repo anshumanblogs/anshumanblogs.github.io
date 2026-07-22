@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import CategoryFilter from '../../components/CategoryFilter.astro';
+import AdSlot from '../../components/AdSlot.astro';
 import { getCollection } from 'astro:content';
 
 const published = (await getCollection('writing', ({ data }) => !data.draft)).sort(
@@ -28,7 +29,12 @@ const published = (await getCollection('writing', ({ data }) => !data.draft)).so
         <p class="text-muted">No articles published yet. Check back soon.</p>
       ) : (
         <div>
-          {published.map((entry) => <ArticleCard entry={entry} />)}
+          {published.map((entry, i) => (
+            <>
+              <ArticleCard entry={entry} />
+              {i === 2 && <AdSlot slotId="2339071842" />}
+            </>
+          ))}
           <p id="writing-empty-state" class="hidden text-muted py-10 text-center">
             No articles match these filters yet.
           </p>

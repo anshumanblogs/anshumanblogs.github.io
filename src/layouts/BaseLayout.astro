@@ -9,6 +9,9 @@ export interface Props {
   publishedTime?: Date;
   modifiedTime?: Date;
   canonicalUrl?: string;
+  image?: string;
+  category?: string;
+  tags?: string[];
 }
 
 const {
@@ -17,8 +20,14 @@ const {
   type = 'website',
   publishedTime,
   modifiedTime,
-  canonicalUrl
+  canonicalUrl,
+  image,
+  category,
+  tags
 } = Astro.props;
+
+// Your real AdSense publisher ID
+const ADSENSE_CLIENT_ID = 'ca-pub-2633513915753897';
 ---
 
 <!doctype html>
@@ -33,9 +42,32 @@ const {
       publishedTime={publishedTime}
       modifiedTime={modifiedTime}
       canonicalUrl={canonicalUrl}
+      image={image}
+      category={category}
+      tags={tags}
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="AnshumanHQ Journal" href="/rss.xml" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4X0M6RM0F6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4X0M6RM0F6', {
+        page_title: document.title,
+        page_location: window.location.href
+      });
+    </script>
+
+    <!-- Google AdSense -->
+    <script
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+      crossorigin="anonymous"
+    ></script>
+    <meta name="google-adsense-account" content={ADSENSE_CLIENT_ID} />
   </head>
   <body>
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-surface focus:text-text focus:px-3 focus:py-2 focus:rounded-md focus:z-[100]">

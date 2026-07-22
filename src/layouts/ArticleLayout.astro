@@ -7,6 +7,7 @@ import TableOfContents from '../components/TableOfContents.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import ArticleNavigation from '../components/ArticleNavigation.astro';
 import RelatedArticles from '../components/RelatedArticles.astro';
+import AdSlot from '../components/AdSlot.astro';
 import type { Heading } from '../components/TableOfContents.astro';
 
 interface Props {
@@ -18,7 +19,10 @@ interface Props {
 }
 
 const { entry, headings, prev, next, all } = Astro.props;
-const { title, description, type, category, pubDate, updatedDate, readingTime, canonicalUrl } = entry.data;
+const {
+  title, description, type, category, pubDate, updatedDate,
+  readingTime, canonicalUrl, coverImage, coverImageAlt, tags
+} = entry.data;
 
 function formatDate(d?: Date) {
   if (!d || isNaN(d.getTime())) return '';
@@ -33,6 +37,9 @@ function formatDate(d?: Date) {
   publishedTime={pubDate}
   modifiedTime={updatedDate}
   canonicalUrl={canonicalUrl}
+  image={coverImage}
+  category={category}
+  tags={tags}
 >
   <Header />
   <ReadingProgress />
@@ -53,6 +60,14 @@ function formatDate(d?: Date) {
         {' · '}{readingTime}
       </p>
 
+      <img
+        src={coverImage}
+        alt={coverImageAlt ?? title}
+        width="1000"
+        height="420"
+        class="mt-8 w-full h-56 sm:h-80 object-cover rounded-lg border border-border bg-surface"
+      />
+
       <div class="mt-6 lg:hidden">
         <slot name="mobile-toc" />
       </div>
@@ -60,6 +75,8 @@ function formatDate(d?: Date) {
       <div class="mt-10 prose prose-invert max-w-none">
         <slot />
       </div>
+
+      <AdSlot slotId="2339071842" />
 
       <RelatedArticles current={entry} all={all} />
       <ArticleNavigation prev={prev} next={next} />

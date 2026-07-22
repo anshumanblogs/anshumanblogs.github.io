@@ -6,6 +6,9 @@ export interface Props {
   type?: 'website' | 'article';
   publishedTime?: Date;
   modifiedTime?: Date;
+  image?: string;
+  category?: string;
+  tags?: string[];
 }
 
 const {
@@ -14,20 +17,62 @@ const {
   canonicalUrl,
   type = 'website',
   publishedTime,
-  modifiedTime
+  modifiedTime,
+  image,
+  category,
+  tags = []
 } = Astro.props;
 
 const siteName = 'AnshumanHQ Journal';
 const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
 const canonical = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site).toString();
-const ogImage = new URL('/favicon.svg', Astro.site).toString();
+const ogImage = new URL(image ?? '/favicon.svg', Astro.site).toString();
+const keywords = [
+  'Anshuman Singh',
+  'software engineering blog',
+  'Python developer',
+  'Flask',
+  'AI ML blog',
+  'physics research',
+  'independent research',
+  category,
+  ...tags
+]
+  .filter(Boolean)
+  .join(', ');
+
+const jsonLd =
+  type === 'article'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: title,
+        description,
+        image: ogImage,
+        author: { '@type': 'Person', name: 'Anshuman Singh', url: 'https://anshumanhq.github.io' },
+        publisher: { '@type': 'Person', name: 'Anshuman Singh' },
+        datePublished: publishedTime?.toISOString(),
+        dateModified: (modifiedTime ?? publishedTime)?.toISOString(),
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical }
+      }
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: siteName,
+        url: 'https://anshumanhq.github.io',
+        description,
+        author: { '@type': 'Person', name: 'Anshuman Singh' }
+      };
 ---
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
+<meta name="keywords" content={keywords} />
 <link rel="canonical" href={canonical} />
-<meta name="robots" content="index, follow" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="googlebot" content="index, follow" />
 <meta name="author" content="Anshuman Singh" />
+<meta name="theme-color" content="#0a0a0b" />
 
 <meta property="og:site_name" content={siteName} />
 <meta property="og:title" content={fullTitle} />
@@ -35,6 +80,9 @@ const ogImage = new URL('/favicon.svg', Astro.site).toString();
 <meta property="og:url" content={canonical} />
 <meta property="og:type" content={type} />
 <meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
 
 {type === 'article' && publishedTime && (
   <meta property="article:published_time" content={publishedTime.toISOString()} />
@@ -42,8 +90,13 @@ const ogImage = new URL('/favicon.svg', Astro.site).toString();
 {type === 'article' && modifiedTime && (
   <meta property="article:modified_time" content={modifiedTime.toISOString()} />
 )}
+{type === 'article' && category && <meta property="article:section" content={category} />}
+{type === 'article' && tags.map((tag) => <meta property="article:tag" content={tag} />)}
+{type === 'article' && <meta property="article:author" content="Anshuman Singh" />}
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

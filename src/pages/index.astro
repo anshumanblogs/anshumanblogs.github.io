@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FeaturedArticle from '../components/FeaturedArticle.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import AdSlot from '../components/AdSlot.astro';
 import { getCollection } from 'astro:content';
 
 const published = (await getCollection('writing', ({ data }) => !data.draft)).sort(
@@ -48,11 +49,13 @@ const categories = [
     )}
 
     {latest.length > 0 && (
-      <section class="pb-16">
+      <section class="pb-4">
         <h2 class="text-sm uppercase tracking-widest text-muted mb-2">Latest Writing</h2>
         {latest.map((entry) => <ArticleCard entry={entry} />)}
       </section>
     )}
+
+    <AdSlot slotId="2339071842" />
 
     <section class="pb-16">
       <h2 class="text-sm uppercase tracking-widest text-muted mb-4">Explore by Category</h2>
