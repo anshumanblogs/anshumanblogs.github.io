@@ -132,7 +132,7 @@ class ProductionConfig(Config):
 
 When you have more than 5 routes, a single `routes.py` file becomes a nightmare. **Blueprints** let you group routes by domain (e.g., `auth`, `dashboard`, `api/v1`).
 
-Here’s a simple API blueprint (`app/routes/api.py`):
+Here's a simple API blueprint (`app/routes/api.py`):
 
 ```python
 from flask import Blueprint, jsonify, request

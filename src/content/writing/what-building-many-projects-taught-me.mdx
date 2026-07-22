@@ -15,17 +15,17 @@ coverImageAlt: "A winding road or maze representing the nonlinear journey of bui
 
 There is a specific kind of existential dread that no coding bootcamp prepares you for. 
 
-It’s 2 AM. You’ve just pushed your 47th commit to a side project. The core feature works, but you just realized you hard-coded an API key into a file you’re about to push to a public repo. You rename the file, break the imports, and spend the next hour fixing a cascade of errors.
+It's 2 AM. You've just pushed your 47th commit to a side project. The core feature works, but you just realized you hard-coded an API key into a file you're about to push to a public repo. You rename the file, break the imports, and spend the next hour fixing a cascade of errors.
 
-Tutorials are beautifully curated gardens. They hand you a map, a clear blue sky, and a guide who holds your hand at every turn. Real project building is a jungle—and you’re hacking through the vines with a machete made of Stack Overflow tabs.
+Tutorials are beautifully curated gardens. They hand you a map, a clear blue sky, and a guide who holds your hand at every turn. Real project building is a jungle—and you're hacking through the vines with a machete made of Stack Overflow tabs.
 
-Through the chaos of building dozens of small applications—some successful, most failures—I’ve learned hard-won lessons that no tutorial can teach you. This is the honest inventory of those scars.
+Through the chaos of building dozens of small applications—some successful, most failures—I've learned hard-won lessons that no tutorial can teach you. This is the honest inventory of those scars.
 
 ![A chaotic scene of tangled wires, post-it notes, and screens, versus a clean, orderly room.](https://picsum.photos/seed/tutorial_vs_reality/1200/600)
 
 ## The Setup: Syntax vs. Judgment
 
-When you learn to code, you measure progress by syntax. “I know how to write a `for` loop,” or “I understand closures.” But after a few years, you realize that the bottleneck of a successful project is rarely the syntax.
+When you learn to code, you measure progress by syntax. "I know how to write a `for` loop," or "I understand closures." But after a few years, you realize that the bottleneck of a successful project is rarely the syntax.
 
 The difference between a "tutorial-follower" and a "shipper" is **judgment**. Judgment is knowing:
 - Which dependency is worth adding to your `package.json` (and which will cause a 3-month upkeep nightmare).
@@ -50,7 +50,7 @@ On one project, I named a function `process_data()`. A month later, I needed to 
 
 If you look at a new project, the exciting part is the "magic"—the AI inference, the slick UI animation, the real-time websocket. 
 
-But here’s the hard truth: **The boring parts (config, logging, error handling) determine if the project survives contact with real users.**
+But here's the hard truth: **The boring parts (config, logging, error handling) determine if the project survives contact with real users.**
 
 I built a microservice that summarized news articles. The summarizer worked great. I deployed it, and within an hour, a user uploaded a corrupted PDF. The service crashed. I didn't have structured logging enabled, so I spent 45 minutes tailing raw terminal output to figure out why. 
 
@@ -83,7 +83,7 @@ Only when the JSON file became too slow did I migrate to PostgreSQL. I didn't wa
 
 I built a "social reading" app. Readers could highlight passages in eBooks and see other readers' highlights in real-time.
 
-It was a beautiful concept. But here’s what I built first:
+It was a beautiful concept. But here's what I built first:
 1. A user authentication system with OAuth.
 2. A beautifully designed profile page.
 3. An admin dashboard to moderate users.
@@ -95,7 +95,7 @@ The app died because I built the *shell* of the product before verifying the *co
 
 ![A runner crossing a finish line, contrasting with a stagnant pile of unfinished projects.](https://picsum.photos/seed/shipping_fast_mvp/1200/600)
 
-## What I’d Do Differently (The New Approach)
+## What I'd Do Differently (The New Approach)
 
 Today, I follow a strict **"One-Page MVP"** rule:
 
@@ -111,7 +111,7 @@ Tutorials teach you the grammar of a language. But projects teach you the *diale
 
 You learn that naming is hard, that logging is a lifesaver, and that shipping something "good enough" on Friday is infinitely better than shipping "perfection" on the next fiscal quarter.
 
-The value of building many small projects isn't just the portfolio of code you collect. It’s the scars you earn. It's the psychological resilience to start a new project, knowing full well that you *will* hit a wall—but also knowing you have the experience to climb over it or tunnel under it.
+The value of building many small projects isn't just the portfolio of code you collect. It's the scars you earn. It's the psychological resilience to start a new project, knowing full well that you *will* hit a wall—but also knowing you have the experience to climb over it or tunnel under it.
 
 If you are hesitating to start that side project, remember: The judgment you build by failing fast and shipping often is the part that doesn't show up in any single lesson. It is the foundation that the lessons are built upon.
 
