@@ -13,33 +13,68 @@ import Footer from '../components/Footer.astro';
   <main id="main-content" class="mx-auto max-w-2xl px-6 py-16">
     <h1 class="text-3xl font-serif font-semibold">About</h1>
 
-    <div class="mt-6 prose prose-invert max-w-none">
+    <div class="mt-8 flex flex-col sm:flex-row gap-6 items-start">
+      <img
+        src="/profile-photo.jpg"
+        alt="Photo of Anshuman Singh"
+        width="140"
+        height="140"
+        class="rounded-full border border-border object-cover w-32 h-32 sm:w-36 sm:h-36 shrink-0"
+      />
+      <div>
+        <h2 class="text-xl font-medium">Anshuman Singh</h2>
+        <p class="text-sm text-muted mt-1">Self-taught developer · Independent researcher · Based in Uttar Pradesh, India</p>
+      </div>
+    </div>
+
+    <div class="mt-10 prose prose-invert max-w-none">
       <p>
-        I'm Anshuman Singh, a self-taught developer working primarily across Python, full-stack
-        web development, and applied AI/ML — alongside an ongoing personal interest in physics
-        and mathematics. This site is a running record of that work: what I've built, what I've
-        struggled with, and what I've actually learned rather than what I merely skimmed.
+        I'm Anshuman Singh, a self-taught developer who started coding in 2023 and has been
+        building things — mostly out of curiosity — ever since. Most of my work happens on
+        Python: full-stack web development, backend systems, and applied AI/ML, alongside an
+        ongoing personal interest in physics and mathematics that has nothing to do with any
+        job and everything to do with genuinely wanting to understand how things work.
       </p>
+
       <p>
-        Most of what I write about falls into a few buckets: backend and full-stack engineering
-        (Python, Flask, APIs, databases), experiments and small research notes in physics and
-        math that I find genuinely interesting, notes from projects as I build them, and honest
-        reflections on what a given tool, book, or course did or didn't teach me.
+        A lot of my development happens in unconventional conditions — I build primarily on
+        Termux, on Android, deploying to platforms like Render, PythonAnywhere, GitHub Pages,
+        and InfinityFree. It's not the setup most tutorials assume, which has made me fairly
+        stubborn about writing code that's simple to reason about and doesn't depend on a
+        heavyweight local environment to work on.
       </p>
+
       <p>
-        I don't treat this journal as a highlight reel. Build logs include the parts that failed.
-        Research notes include the limitations of whatever small experiment prompted them. The
-        goal is a record I can actually trust later, not a portfolio optimized to impress on
-        first read.
+        This journal exists because building things quietly and never writing any of it down
+        felt like a waste of the actual learning. Every build log, research note, and
+        reflection here is an honest record — including the parts that failed — rather than a
+        highlight reel written to impress on first read.
       </p>
+
+      <h2>What I Write About</h2>
+      <ul>
+        <li><strong>Engineering</strong> — Python, Flask, APIs, databases, full-stack web development</li>
+        <li><strong>AI &amp; ML</strong> — machine learning concepts, LLMs, embeddings, applied AI projects</li>
+        <li><strong>Research</strong> — physics, mathematics, and small computational experiments</li>
+        <li><strong>Projects</strong> — build logs and case studies from things I'm actively building</li>
+        <li><strong>Learning</strong> — honest reflections on books, courses, and concepts I'm working through</li>
+      </ul>
+
+      <h2>What This Journal Isn't</h2>
+      <p>
+        It isn't a portfolio optimized to look impressive, and it isn't a place I claim
+        credentials, employers, or achievements I don't have. What's here is what I've actually
+        built and actually learned — nothing inflated, nothing borrowed.
+      </p>
+
       <h2>Elsewhere</h2>
       <ul>
-        <li><a href="https://github.com/anshuman365" target="_blank" rel="noopener noreferrer">GitHub — github.com/anshuman365</a></li>
-        <li><a href="https://anshuman365.github.io" target="_blank" rel="noopener noreferrer">Portfolio — anshuman365.github.io</a></li>
+        <li><a href="https://github.com/anshumanhq" target="_blank" rel="noopener noreferrer">GitHub — github.com/anshuman365</a></li>
+        <li><a href="https://anshumanhq.github.io" target="_blank" rel="noopener noreferrer">Main Website — anshumanhq.github.io</a></li>
         <li>
           LinkedIn —
-          <a href="https://www.linkedin.com/in/anshuman-singh-662183303/" target="_blank" rel="noopener noreferrer">
-            linkedin.com/in/anshuman-singh-662183303/
+          <a href="https://www.linkedin.com/in/anshuman-singh-662183303" target="_blank" rel="noopener noreferrer">
+            linkedin.com/in/anshuman-singh-662183303
           </a>
         </li>
       </ul>
