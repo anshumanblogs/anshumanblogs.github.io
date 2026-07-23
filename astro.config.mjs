@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';  
 
 export default defineConfig({
   site: 'https://anshumanblogs.github.io',
@@ -11,14 +12,13 @@ export default defineConfig({
   output: 'static',
   integrations: [
     mdx({
-      remarkPlugins: [remarkMath],
+      remarkPlugins: [remarkMath, remarkGfm],  
       rehypePlugins: [rehypeKatex],
     }),
     tailwind({ applyBaseStyles: false }),
   ],
   markdown: {
-    // 👇 These plugins are for .md files (they were missing!)
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkMath, remarkGfm], 
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
       theme: 'github-dark-dimmed',
