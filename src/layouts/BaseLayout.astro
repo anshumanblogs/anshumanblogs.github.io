@@ -26,7 +26,6 @@ const {
   tags
 } = Astro.props;
 
-// Your real AdSense publisher ID
 const ADSENSE_CLIENT_ID = 'ca-pub-2633513915753897';
 ---
 
@@ -74,5 +73,64 @@ const ADSENSE_CLIENT_ID = 'ca-pub-2633513915753897';
       Skip to content
     </a>
     <slot />
+
+    <!-- Mermaid Renderer -->
+    <script type="module">
+      import mermaid from 'mermaid';
+
+      // Initialize Mermaid with dark theme
+      mermaid.initialize({
+        theme: 'dark',
+        themeVariables: {
+          background: '#0a0a0b',
+          primaryColor: '#6e8bff',
+          primaryTextColor: '#e8e8ea',
+          primaryBorderColor: '#6e8bff',
+          lineColor: '#6e8bff',
+          secondaryColor: '#1c2333',
+          tertiaryColor: '#131316',
+          fontFamily: 'Inter, sans-serif',
+        },
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true,
+          curve: 'basis',
+        },
+        sequence: {
+          diagramMarginX: 50,
+          diagramMarginY: 10,
+          boxTextMargin: 5,
+          noteMargin: 10,
+          messageMargin: 35,
+          mirrorActors: true,
+        },
+        gantt: {
+          useMaxWidth: true,
+        },
+        pie: {
+          useMaxWidth: true,
+        },
+      });
+
+      // Render all mermaid code blocks after page load
+      document.addEventListener('DOMContentLoaded', async () => {
+        const blocks = document.querySelectorAll('pre code.language-mermaid');
+        for (const block of blocks) {
+          const pre = block.parentElement;
+          if (!pre) continue;
+          try {
+            // Replace the pre element with the rendered SVG
+            const { svg } = await mermaid.render(`mermaid-${Date.now()}-${Math.random()}`, block.textContent);
+            pre.innerHTML = svg;
+          } catch (error) {
+            console.warn('Mermaid rendering failed:', error);
+            // Optionally show error message
+            pre.innerHTML = `<div style="color: #ff6b6b; padding: 1rem; border: 1px solid #ff6b6b; border-radius: 8px;">
+              <strong>Mermaid diagram failed to render:</strong> ${error.message}
+            </div>`;
+          }
+        }
+      });
+    </script>
   </body>
 </html>
