@@ -74,52 +74,55 @@ const ADSENSE_CLIENT_ID = 'ca-pub-2633513915753897';
     </a>
     <slot />
 
-    <!-- Mermaid Renderer (loaded as classic script – no ES module) -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.0.0/dist/mermaid.min.js"></script>
+    <!-- Mermaid Renderer (using a reliable CDN) -->
+    <script src="https://unpkg.com/mermaid@10.9.0/dist/mermaid.min.js"></script>
     <script>
+      // Wait for the library to load
       document.addEventListener('DOMContentLoaded', function() {
-        if (typeof mermaid === 'undefined') {
-          console.warn('Mermaid library not loaded.');
-          return;
-        }
+        // Mermaid sometimes takes a moment to become global
+        function renderMermaid() {
+          if (typeof window.mermaid !== 'undefined') {
+            window.mermaid.initialize({
+              theme: 'dark',
+              themeVariables: {
+                background: '#0a0a0b',
+                primaryColor: '#6e8bff',
+                primaryTextColor: '#e8e8ea',
+                primaryBorderColor: '#6e8bff',
+                lineColor: '#6e8bff',
+                secondaryColor: '#1c2333',
+                tertiaryColor: '#131316',
+                fontFamily: 'Inter, sans-serif',
+              },
+              flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+              sequence: { diagramMarginX: 50, diagramMarginY: 10, boxTextMargin: 5, noteMargin: 10, messageMargin: 35, mirrorActors: true },
+              gantt: { useMaxWidth: true },
+              pie: { useMaxWidth: true },
+            });
 
-        // Initialize Mermaid
-        mermaid.initialize({
-          theme: 'dark',
-          themeVariables: {
-            background: '#0a0a0b',
-            primaryColor: '#6e8bff',
-            primaryTextColor: '#e8e8ea',
-            primaryBorderColor: '#6e8bff',
-            lineColor: '#6e8bff',
-            secondaryColor: '#1c2333',
-            tertiaryColor: '#131316',
-            fontFamily: 'Inter, sans-serif',
-          },
-          flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
-          sequence: { diagramMarginX: 50, diagramMarginY: 10, boxTextMargin: 5, noteMargin: 10, messageMargin: 35, mirrorActors: true },
-          gantt: { useMaxWidth: true },
-          pie: { useMaxWidth: true },
-        });
-
-        // Render all mermaid code blocks
-        const blocks = document.querySelectorAll('pre code.language-mermaid');
-        blocks.forEach(async (block) => {
-          const pre = block.parentElement;
-          if (!pre) return;
-          try {
-            const { svg } = await mermaid.render(
-              `mermaid-${Date.now()}-${Math.random()}`,
-              block.textContent
-            );
-            pre.innerHTML = svg;
-          } catch (error) {
-            console.warn('Mermaid rendering failed:', error);
-            pre.innerHTML = `<div style="color: #ff6b6b; padding: 1rem; border: 1px solid #ff6b6b; border-radius: 8px;">
-              <strong>Mermaid diagram failed to render:</strong> ${error.message}
-            </div>`;
+            const blocks = document.querySelectorAll('pre code.language-mermaid');
+            blocks.forEach(async (block) => {
+              const pre = block.parentElement;
+              if (!pre) return;
+              try {
+                const { svg } = await window.mermaid.render(
+                  `mermaid-${Date.now()}-${Math.random()}`,
+                  block.textContent
+                );
+                pre.innerHTML = svg;
+              } catch (error) {
+                console.warn('Mermaid rendering failed:', error);
+                pre.innerHTML = `<div style="color: #ff6b6b; padding: 1rem; border: 1px solid #ff6b6b; border-radius: 8px;">
+                  <strong>Mermaid diagram failed to render:</strong> ${error.message}
+                </div>`;
+              }
+            });
+          } else {
+            // Retry after a short delay if library not yet available
+            setTimeout(renderMermaid, 500);
           }
-        });
+        }
+        renderMermaid();
       });
     </script>
   </body>
